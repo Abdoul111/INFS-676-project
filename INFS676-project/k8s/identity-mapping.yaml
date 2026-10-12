@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloud-identity-mapping
+  namespace: cloud-twin
+data:
+  web-sa.roleArn: arn:aws:iam::000000000000:role/cloud-twin-web-role
+  api-sa.roleArn: arn:aws:iam::000000000000:role/cloud-twin-api-role
+  mappingNotes: "Prototype mapping: Kubernetes service accounts identify the workload identities used by the graph model. LocalStack does not provide cloud-provider IRSA, so this mapping is explicit and local. Workloads reach the shared Docker-hosted LocalStack endpoint through host.docker.internal."

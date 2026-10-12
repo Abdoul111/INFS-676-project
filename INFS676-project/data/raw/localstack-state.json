@@ -1,0 +1,132 @@
+﻿{
+    "collectedAt":  "2026-10-12T21:00:46.1556258Z",
+    "region":  "us-east-1",
+    "endpoint":  "http://localhost:4566",
+    "identityMappings":  [
+                             {
+                                 "workload":  "web-pod",
+                                 "namespace":  "cloud-twin",
+                                 "serviceAccount":  "web-sa",
+                                 "roleArn":  "arn:aws:iam::000000000000:role/cloud-twin-web-role"
+                             },
+                             {
+                                 "workload":  "api-pod",
+                                 "namespace":  "cloud-twin",
+                                 "serviceAccount":  "api-sa",
+                                 "roleArn":  "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+                             }
+                         ],
+    "roles":  [
+                  {
+                      "roleName":  "cloud-twin-web-role",
+                      "roleArn":  "arn:aws:iam::000000000000:role/cloud-twin-web-role",
+                      "trustPolicy":  {
+                                          "Version":  "2012-10-17",
+                                          "Statement":  [
+                                                            {
+                                                                "Effect":  "Allow",
+                                                                "Principal":  {
+                                                                                  "Federated":  "arn:aws:iam::000000000000:oidc-provider/kubernetes.default.svc"
+                                                                              },
+                                                                "Action":  "sts:AssumeRoleWithWebIdentity",
+                                                                "Condition":  {
+                                                                                  "StringEquals":  {
+                                                                                                       "kubernetes.default.svc:sub":  "system:serviceaccount:cloud-twin:web-sa"
+                                                                                                   }
+                                                                              }
+                                                            }
+                                                        ]
+                                      },
+                      "inlinePolicies":  [
+                                             {
+                                                 "name":  "cloud-twin-web-policy",
+                                                 "document":  {
+                                                                  "Version":  "2012-10-17",
+                                                                  "Statement":  [
+                                                                                    {
+                                                                                        "Sid":  "ReadPublicObjects",
+                                                                                        "Effect":  "Allow",
+                                                                                        "Action":  [
+                                                                                                       "s3:ListBucket",
+                                                                                                       "s3:GetObject"
+                                                                                                   ],
+                                                                                        "Resource":  [
+                                                                                                         "arn:aws:s3:::cloud-twin-public",
+                                                                                                         "arn:aws:s3:::cloud-twin-public/*"
+                                                                                                     ]
+                                                                                    },
+                                                                                    {
+                                                                                        "Sid":  "AllowApiRoleAssumption",
+                                                                                        "Effect":  "Allow",
+                                                                                        "Action":  "sts:AssumeRole",
+                                                                                        "Resource":  "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+                                                                                    }
+                                                                                ]
+                                                              }
+                                             }
+                                         ]
+                  },
+                  {
+                      "roleName":  "cloud-twin-api-role",
+                      "roleArn":  "arn:aws:iam::000000000000:role/cloud-twin-api-role",
+                      "trustPolicy":  {
+                                          "Version":  "2012-10-17",
+                                          "Statement":  [
+                                                            {
+                                                                "Effect":  "Allow",
+                                                                "Principal":  {
+                                                                                  "AWS":  "arn:aws:iam::000000000000:role/cloud-twin-web-role"
+                                                                              },
+                                                                "Action":  "sts:AssumeRole"
+                                                            }
+                                                        ]
+                                      },
+                      "inlinePolicies":  [
+                                             {
+                                                 "name":  "cloud-twin-api-policy",
+                                                 "document":  {
+                                                                  "Version":  "2012-10-17",
+                                                                  "Statement":  [
+                                                                                    {
+                                                                                        "Sid":  "ReadSensitiveObjects",
+                                                                                        "Effect":  "Allow",
+                                                                                        "Action":  [
+                                                                                                       "s3:ListBucket",
+                                                                                                       "s3:GetObject"
+                                                                                                   ],
+                                                                                        "Resource":  [
+                                                                                                         "arn:aws:s3:::cloud-twin-sensitive",
+                                                                                                         "arn:aws:s3:::cloud-twin-sensitive/*"
+                                                                                                     ]
+                                                                                    }
+                                                                                ]
+                                                              }
+                                             }
+                                         ]
+                  }
+              ],
+    "buckets":  [
+                    {
+                        "name":  "cloud-twin-public",
+                        "creationDate":  "2026-10-12T17:19:19.000Z",
+                        "objects":  [
+                                        {
+                                            "key":  "public-object.txt",
+                                            "size":  67,
+                                            "etag":  "\"5c1d0a5c1a97d69ecef57b045b7265f3\""
+                                        }
+                                    ]
+                    },
+                    {
+                        "name":  "cloud-twin-sensitive",
+                        "creationDate":  "2026-10-12T17:19:21.000Z",
+                        "objects":  [
+                                        {
+                                            "key":  "sensitive-object.txt",
+                                            "size":  85,
+                                            "etag":  "\"9e6a4782336764eeabd25b0bd263dcd8\""
+                                        }
+                                    ]
+                    }
+                ]
+}

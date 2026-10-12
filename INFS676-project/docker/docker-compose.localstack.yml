@@ -1,0 +1,22 @@
+services:
+  localstack:
+    image: localstack/localstack:3.8.1
+    container_name: cloud-twin-localstack
+    ports:
+      - "4566:4566"
+      - "4510-4559:4510-4559"
+    environment:
+      - SERVICES=s3,iam,sts,logs
+      - DEBUG=0
+      - LS_LOG=warn
+      - AWS_DEFAULT_REGION=us-east-1
+      - LOCALSTACK_HOST=localhost
+    volumes:
+      - ./localstack-data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:4566/_localstack/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s

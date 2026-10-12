@@ -1,0 +1,1329 @@
+{
+  "nodes": [
+    {
+      "id": "workload:web-pod",
+      "type": "workload",
+      "name": "web-pod",
+      "tier": "public"
+    },
+    {
+      "id": "service-account:cloud-twin:web-sa",
+      "type": "service_account",
+      "name": "web-sa"
+    },
+    {
+      "id": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "type": "iam_role",
+      "name": "cloud-twin-web-role",
+      "arn": "arn:aws:iam::000000000000:role/cloud-twin-web-role"
+    },
+    {
+      "id": "workload:api-pod",
+      "type": "workload",
+      "name": "api-pod",
+      "tier": "private"
+    },
+    {
+      "id": "service-account:cloud-twin:api-sa",
+      "type": "service_account",
+      "name": "api-sa"
+    },
+    {
+      "id": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "type": "iam_role",
+      "name": "cloud-twin-api-role",
+      "arn": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+    },
+    {
+      "id": "principal:arn:aws:iam::000000000000:oidc-provider/kubernetes.default.svc",
+      "type": "principal",
+      "name": "arn:aws:iam::000000000000:oidc-provider/kubernetes.default.svc"
+    },
+    {
+      "id": "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:s3:ListBucket:arn:aws:s3:::cloud-twin-public",
+      "type": "permission",
+      "effect": "Allow",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::cloud-twin-public",
+      "policy": "cloud-twin-web-policy"
+    },
+    {
+      "id": "s3-bucket:cloud-twin-public",
+      "type": "s3_bucket",
+      "name": "cloud-twin-public"
+    },
+    {
+      "id": "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:s3:ListBucket:arn:aws:s3:::cloud-twin-public/*",
+      "type": "permission",
+      "effect": "Allow",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::cloud-twin-public/*",
+      "policy": "cloud-twin-web-policy"
+    },
+    {
+      "id": "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:s3:GetObject:arn:aws:s3:::cloud-twin-public",
+      "type": "permission",
+      "effect": "Allow",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::cloud-twin-public",
+      "policy": "cloud-twin-web-policy"
+    },
+    {
+      "id": "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:s3:GetObject:arn:aws:s3:::cloud-twin-public/*",
+      "type": "permission",
+      "effect": "Allow",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::cloud-twin-public/*",
+      "policy": "cloud-twin-web-policy"
+    },
+    {
+      "id": "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:sts:AssumeRole:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "type": "permission",
+      "effect": "Allow",
+      "action": "sts:AssumeRole",
+      "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "policy": "cloud-twin-web-policy"
+    },
+    {
+      "id": "principal:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "type": "principal",
+      "name": "arn:aws:iam::000000000000:role/cloud-twin-web-role"
+    },
+    {
+      "id": "permission:arn:aws:iam::000000000000:role/cloud-twin-api-role:cloud-twin-api-policy:s3:ListBucket:arn:aws:s3:::cloud-twin-sensitive",
+      "type": "permission",
+      "effect": "Allow",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::cloud-twin-sensitive",
+      "policy": "cloud-twin-api-policy"
+    },
+    {
+      "id": "s3-bucket:cloud-twin-sensitive",
+      "type": "s3_bucket",
+      "name": "cloud-twin-sensitive"
+    },
+    {
+      "id": "permission:arn:aws:iam::000000000000:role/cloud-twin-api-role:cloud-twin-api-policy:s3:ListBucket:arn:aws:s3:::cloud-twin-sensitive/*",
+      "type": "permission",
+      "effect": "Allow",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::cloud-twin-sensitive/*",
+      "policy": "cloud-twin-api-policy"
+    },
+    {
+      "id": "permission:arn:aws:iam::000000000000:role/cloud-twin-api-role:cloud-twin-api-policy:s3:GetObject:arn:aws:s3:::cloud-twin-sensitive",
+      "type": "permission",
+      "effect": "Allow",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::cloud-twin-sensitive",
+      "policy": "cloud-twin-api-policy"
+    },
+    {
+      "id": "permission:arn:aws:iam::000000000000:role/cloud-twin-api-role:cloud-twin-api-policy:s3:GetObject:arn:aws:s3:::cloud-twin-sensitive/*",
+      "type": "permission",
+      "effect": "Allow",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::cloud-twin-sensitive/*",
+      "policy": "cloud-twin-api-policy"
+    },
+    {
+      "id": "s3-object:cloud-twin-public/public-object.txt",
+      "type": "s3_object",
+      "name": "public-object.txt",
+      "bucket": "cloud-twin-public"
+    },
+    {
+      "id": "s3-object:cloud-twin-sensitive/sensitive-object.txt",
+      "type": "s3_object",
+      "name": "sensitive-object.txt",
+      "bucket": "cloud-twin-sensitive"
+    }
+  ],
+  "edges": [
+    {
+      "source": "workload:web-pod",
+      "relation": "uses_service_account",
+      "target": "service-account:cloud-twin:web-sa"
+    },
+    {
+      "source": "service-account:cloud-twin:web-sa",
+      "relation": "maps_to_role",
+      "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+    },
+    {
+      "source": "workload:api-pod",
+      "relation": "uses_service_account",
+      "target": "service-account:cloud-twin:api-sa"
+    },
+    {
+      "source": "service-account:cloud-twin:api-sa",
+      "relation": "maps_to_role",
+      "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "relation": "trusts",
+      "target": "principal:arn:aws:iam::000000000000:oidc-provider/kubernetes.default.svc",
+      "action": "sts:AssumeRoleWithWebIdentity"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "relation": "has_permission",
+      "target": "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:s3:ListBucket:arn:aws:s3:::cloud-twin-public",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::cloud-twin-public"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "relation": "can_access",
+      "target": "s3-bucket:cloud-twin-public",
+      "action": "s3:ListBucket",
+      "effect": "Allow",
+      "resource": "arn:aws:s3:::cloud-twin-public"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "relation": "has_permission",
+      "target": "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:s3:ListBucket:arn:aws:s3:::cloud-twin-public/*",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::cloud-twin-public/*"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "relation": "can_access",
+      "target": "s3-bucket:cloud-twin-public",
+      "action": "s3:ListBucket",
+      "effect": "Allow",
+      "resource": "arn:aws:s3:::cloud-twin-public/*"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "relation": "has_permission",
+      "target": "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:s3:GetObject:arn:aws:s3:::cloud-twin-public",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::cloud-twin-public"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "relation": "can_access",
+      "target": "s3-bucket:cloud-twin-public",
+      "action": "s3:GetObject",
+      "effect": "Allow",
+      "resource": "arn:aws:s3:::cloud-twin-public"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "relation": "has_permission",
+      "target": "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:s3:GetObject:arn:aws:s3:::cloud-twin-public/*",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::cloud-twin-public/*"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "relation": "can_access",
+      "target": "s3-bucket:cloud-twin-public",
+      "action": "s3:GetObject",
+      "effect": "Allow",
+      "resource": "arn:aws:s3:::cloud-twin-public/*"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "relation": "has_permission",
+      "target": "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:sts:AssumeRole:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "action": "sts:AssumeRole",
+      "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "relation": "can_assume_role",
+      "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "action": "sts:AssumeRole",
+      "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "relation": "trusts",
+      "target": "principal:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+      "action": "sts:AssumeRole"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "relation": "has_permission",
+      "target": "permission:arn:aws:iam::000000000000:role/cloud-twin-api-role:cloud-twin-api-policy:s3:ListBucket:arn:aws:s3:::cloud-twin-sensitive",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::cloud-twin-sensitive"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "relation": "can_access",
+      "target": "s3-bucket:cloud-twin-sensitive",
+      "action": "s3:ListBucket",
+      "effect": "Allow",
+      "resource": "arn:aws:s3:::cloud-twin-sensitive"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "relation": "has_permission",
+      "target": "permission:arn:aws:iam::000000000000:role/cloud-twin-api-role:cloud-twin-api-policy:s3:ListBucket:arn:aws:s3:::cloud-twin-sensitive/*",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "relation": "can_access",
+      "target": "s3-bucket:cloud-twin-sensitive",
+      "action": "s3:ListBucket",
+      "effect": "Allow",
+      "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "relation": "has_permission",
+      "target": "permission:arn:aws:iam::000000000000:role/cloud-twin-api-role:cloud-twin-api-policy:s3:GetObject:arn:aws:s3:::cloud-twin-sensitive",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::cloud-twin-sensitive"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "relation": "can_access",
+      "target": "s3-bucket:cloud-twin-sensitive",
+      "action": "s3:GetObject",
+      "effect": "Allow",
+      "resource": "arn:aws:s3:::cloud-twin-sensitive"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "relation": "has_permission",
+      "target": "permission:arn:aws:iam::000000000000:role/cloud-twin-api-role:cloud-twin-api-policy:s3:GetObject:arn:aws:s3:::cloud-twin-sensitive/*",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+    },
+    {
+      "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+      "relation": "can_access",
+      "target": "s3-bucket:cloud-twin-sensitive",
+      "action": "s3:GetObject",
+      "effect": "Allow",
+      "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+    },
+    {
+      "source": "s3-bucket:cloud-twin-public",
+      "relation": "contains",
+      "target": "s3-object:cloud-twin-public/public-object.txt"
+    },
+    {
+      "source": "s3-bucket:cloud-twin-sensitive",
+      "relation": "contains",
+      "target": "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+    }
+  ],
+  "predictedPaths": [
+    {
+      "nodes": [
+        "workload:web-pod",
+        "service-account:cloud-twin:web-sa"
+      ],
+      "edges": [
+        {
+          "source": "workload:web-pod",
+          "relation": "uses_service_account",
+          "target": "service-account:cloud-twin:web-sa"
+        }
+      ]
+    },
+    {
+      "nodes": [
+        "workload:web-pod",
+        "service-account:cloud-twin:web-sa",
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+      ],
+      "edges": [
+        {
+          "source": "workload:web-pod",
+          "relation": "uses_service_account",
+          "target": "service-account:cloud-twin:web-sa"
+        },
+        {
+          "source": "service-account:cloud-twin:web-sa",
+          "relation": "maps_to_role",
+          "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+        }
+      ]
+    },
+    {
+      "nodes": [
+        "workload:web-pod",
+        "service-account:cloud-twin:web-sa",
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+        "s3-bucket:cloud-twin-public"
+      ],
+      "edges": [
+        {
+          "source": "workload:web-pod",
+          "relation": "uses_service_account",
+          "target": "service-account:cloud-twin:web-sa"
+        },
+        {
+          "source": "service-account:cloud-twin:web-sa",
+          "relation": "maps_to_role",
+          "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+        },
+        {
+          "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+          "relation": "can_access",
+          "target": "s3-bucket:cloud-twin-public",
+          "action": "s3:GetObject",
+          "effect": "Allow",
+          "resource": "arn:aws:s3:::cloud-twin-public/*"
+        }
+      ]
+    },
+    {
+      "nodes": [
+        "workload:web-pod",
+        "service-account:cloud-twin:web-sa",
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role"
+      ],
+      "edges": [
+        {
+          "source": "workload:web-pod",
+          "relation": "uses_service_account",
+          "target": "service-account:cloud-twin:web-sa"
+        },
+        {
+          "source": "service-account:cloud-twin:web-sa",
+          "relation": "maps_to_role",
+          "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+        },
+        {
+          "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+          "relation": "can_assume_role",
+          "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+          "action": "sts:AssumeRole",
+          "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+        }
+      ]
+    },
+    {
+      "nodes": [
+        "workload:web-pod",
+        "service-account:cloud-twin:web-sa",
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+        "s3-bucket:cloud-twin-public",
+        "s3-object:cloud-twin-public/public-object.txt"
+      ],
+      "edges": [
+        {
+          "source": "workload:web-pod",
+          "relation": "uses_service_account",
+          "target": "service-account:cloud-twin:web-sa"
+        },
+        {
+          "source": "service-account:cloud-twin:web-sa",
+          "relation": "maps_to_role",
+          "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+        },
+        {
+          "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+          "relation": "can_access",
+          "target": "s3-bucket:cloud-twin-public",
+          "action": "s3:GetObject",
+          "effect": "Allow",
+          "resource": "arn:aws:s3:::cloud-twin-public/*"
+        },
+        {
+          "source": "s3-bucket:cloud-twin-public",
+          "relation": "contains",
+          "target": "s3-object:cloud-twin-public/public-object.txt"
+        }
+      ]
+    },
+    {
+      "nodes": [
+        "workload:web-pod",
+        "service-account:cloud-twin:web-sa",
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+        "s3-bucket:cloud-twin-sensitive"
+      ],
+      "edges": [
+        {
+          "source": "workload:web-pod",
+          "relation": "uses_service_account",
+          "target": "service-account:cloud-twin:web-sa"
+        },
+        {
+          "source": "service-account:cloud-twin:web-sa",
+          "relation": "maps_to_role",
+          "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+        },
+        {
+          "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+          "relation": "can_assume_role",
+          "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+          "action": "sts:AssumeRole",
+          "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+        },
+        {
+          "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+          "relation": "can_access",
+          "target": "s3-bucket:cloud-twin-sensitive",
+          "action": "s3:GetObject",
+          "effect": "Allow",
+          "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+        }
+      ]
+    },
+    {
+      "nodes": [
+        "workload:web-pod",
+        "service-account:cloud-twin:web-sa",
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+        "s3-bucket:cloud-twin-sensitive",
+        "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+      ],
+      "edges": [
+        {
+          "source": "workload:web-pod",
+          "relation": "uses_service_account",
+          "target": "service-account:cloud-twin:web-sa"
+        },
+        {
+          "source": "service-account:cloud-twin:web-sa",
+          "relation": "maps_to_role",
+          "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+        },
+        {
+          "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+          "relation": "can_assume_role",
+          "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+          "action": "sts:AssumeRole",
+          "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+        },
+        {
+          "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+          "relation": "can_access",
+          "target": "s3-bucket:cloud-twin-sensitive",
+          "action": "s3:GetObject",
+          "effect": "Allow",
+          "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+        },
+        {
+          "source": "s3-bucket:cloud-twin-sensitive",
+          "relation": "contains",
+          "target": "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+        }
+      ]
+    }
+  ],
+  "reachability": {
+    "workload:web-pod": {
+      "reachableNodes": [
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+        "s3-bucket:cloud-twin-public",
+        "s3-bucket:cloud-twin-sensitive",
+        "s3-object:cloud-twin-public/public-object.txt",
+        "s3-object:cloud-twin-sensitive/sensitive-object.txt",
+        "service-account:cloud-twin:web-sa"
+      ],
+      "paths": [
+        {
+          "nodes": [
+            "workload:web-pod",
+            "service-account:cloud-twin:web-sa"
+          ],
+          "edges": [
+            {
+              "source": "workload:web-pod",
+              "relation": "uses_service_account",
+              "target": "service-account:cloud-twin:web-sa"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "workload:web-pod",
+            "service-account:cloud-twin:web-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+          ],
+          "edges": [
+            {
+              "source": "workload:web-pod",
+              "relation": "uses_service_account",
+              "target": "service-account:cloud-twin:web-sa"
+            },
+            {
+              "source": "service-account:cloud-twin:web-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "workload:web-pod",
+            "service-account:cloud-twin:web-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "s3-bucket:cloud-twin-public"
+          ],
+          "edges": [
+            {
+              "source": "workload:web-pod",
+              "relation": "uses_service_account",
+              "target": "service-account:cloud-twin:web-sa"
+            },
+            {
+              "source": "service-account:cloud-twin:web-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-public",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-public/*"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "workload:web-pod",
+            "service-account:cloud-twin:web-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role"
+          ],
+          "edges": [
+            {
+              "source": "workload:web-pod",
+              "relation": "uses_service_account",
+              "target": "service-account:cloud-twin:web-sa"
+            },
+            {
+              "source": "service-account:cloud-twin:web-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_assume_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "action": "sts:AssumeRole",
+              "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "workload:web-pod",
+            "service-account:cloud-twin:web-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "s3-bucket:cloud-twin-public",
+            "s3-object:cloud-twin-public/public-object.txt"
+          ],
+          "edges": [
+            {
+              "source": "workload:web-pod",
+              "relation": "uses_service_account",
+              "target": "service-account:cloud-twin:web-sa"
+            },
+            {
+              "source": "service-account:cloud-twin:web-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-public",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-public/*"
+            },
+            {
+              "source": "s3-bucket:cloud-twin-public",
+              "relation": "contains",
+              "target": "s3-object:cloud-twin-public/public-object.txt"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "workload:web-pod",
+            "service-account:cloud-twin:web-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+            "s3-bucket:cloud-twin-sensitive"
+          ],
+          "edges": [
+            {
+              "source": "workload:web-pod",
+              "relation": "uses_service_account",
+              "target": "service-account:cloud-twin:web-sa"
+            },
+            {
+              "source": "service-account:cloud-twin:web-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_assume_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "action": "sts:AssumeRole",
+              "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-sensitive",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "workload:web-pod",
+            "service-account:cloud-twin:web-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+            "s3-bucket:cloud-twin-sensitive",
+            "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+          ],
+          "edges": [
+            {
+              "source": "workload:web-pod",
+              "relation": "uses_service_account",
+              "target": "service-account:cloud-twin:web-sa"
+            },
+            {
+              "source": "service-account:cloud-twin:web-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_assume_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "action": "sts:AssumeRole",
+              "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-sensitive",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+            },
+            {
+              "source": "s3-bucket:cloud-twin-sensitive",
+              "relation": "contains",
+              "target": "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "service-account:cloud-twin:web-sa": {
+      "reachableNodes": [
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+        "s3-bucket:cloud-twin-public",
+        "s3-bucket:cloud-twin-sensitive",
+        "s3-object:cloud-twin-public/public-object.txt",
+        "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+      ],
+      "paths": [
+        {
+          "nodes": [
+            "service-account:cloud-twin:web-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+          ],
+          "edges": [
+            {
+              "source": "service-account:cloud-twin:web-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "service-account:cloud-twin:web-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "s3-bucket:cloud-twin-public"
+          ],
+          "edges": [
+            {
+              "source": "service-account:cloud-twin:web-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-public",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-public/*"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "service-account:cloud-twin:web-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role"
+          ],
+          "edges": [
+            {
+              "source": "service-account:cloud-twin:web-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_assume_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "action": "sts:AssumeRole",
+              "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "service-account:cloud-twin:web-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "s3-bucket:cloud-twin-public",
+            "s3-object:cloud-twin-public/public-object.txt"
+          ],
+          "edges": [
+            {
+              "source": "service-account:cloud-twin:web-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-public",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-public/*"
+            },
+            {
+              "source": "s3-bucket:cloud-twin-public",
+              "relation": "contains",
+              "target": "s3-object:cloud-twin-public/public-object.txt"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "service-account:cloud-twin:web-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+            "s3-bucket:cloud-twin-sensitive"
+          ],
+          "edges": [
+            {
+              "source": "service-account:cloud-twin:web-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_assume_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "action": "sts:AssumeRole",
+              "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-sensitive",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "service-account:cloud-twin:web-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+            "s3-bucket:cloud-twin-sensitive",
+            "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+          ],
+          "edges": [
+            {
+              "source": "service-account:cloud-twin:web-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_assume_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "action": "sts:AssumeRole",
+              "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-sensitive",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+            },
+            {
+              "source": "s3-bucket:cloud-twin-sensitive",
+              "relation": "contains",
+              "target": "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role": {
+      "reachableNodes": [
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+        "s3-bucket:cloud-twin-public",
+        "s3-bucket:cloud-twin-sensitive",
+        "s3-object:cloud-twin-public/public-object.txt",
+        "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+      ],
+      "paths": [
+        {
+          "nodes": [
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "s3-bucket:cloud-twin-public"
+          ],
+          "edges": [
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-public",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-public/*"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role"
+          ],
+          "edges": [
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_assume_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "action": "sts:AssumeRole",
+              "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "s3-bucket:cloud-twin-public",
+            "s3-object:cloud-twin-public/public-object.txt"
+          ],
+          "edges": [
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-public",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-public/*"
+            },
+            {
+              "source": "s3-bucket:cloud-twin-public",
+              "relation": "contains",
+              "target": "s3-object:cloud-twin-public/public-object.txt"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+            "s3-bucket:cloud-twin-sensitive"
+          ],
+          "edges": [
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_assume_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "action": "sts:AssumeRole",
+              "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-sensitive",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+            "s3-bucket:cloud-twin-sensitive",
+            "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+          ],
+          "edges": [
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-web-role",
+              "relation": "can_assume_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "action": "sts:AssumeRole",
+              "resource": "arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-sensitive",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+            },
+            {
+              "source": "s3-bucket:cloud-twin-sensitive",
+              "relation": "contains",
+              "target": "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "workload:api-pod": {
+      "reachableNodes": [
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+        "s3-bucket:cloud-twin-sensitive",
+        "s3-object:cloud-twin-sensitive/sensitive-object.txt",
+        "service-account:cloud-twin:api-sa"
+      ],
+      "paths": [
+        {
+          "nodes": [
+            "workload:api-pod",
+            "service-account:cloud-twin:api-sa"
+          ],
+          "edges": [
+            {
+              "source": "workload:api-pod",
+              "relation": "uses_service_account",
+              "target": "service-account:cloud-twin:api-sa"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "workload:api-pod",
+            "service-account:cloud-twin:api-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role"
+          ],
+          "edges": [
+            {
+              "source": "workload:api-pod",
+              "relation": "uses_service_account",
+              "target": "service-account:cloud-twin:api-sa"
+            },
+            {
+              "source": "service-account:cloud-twin:api-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "workload:api-pod",
+            "service-account:cloud-twin:api-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+            "s3-bucket:cloud-twin-sensitive"
+          ],
+          "edges": [
+            {
+              "source": "workload:api-pod",
+              "relation": "uses_service_account",
+              "target": "service-account:cloud-twin:api-sa"
+            },
+            {
+              "source": "service-account:cloud-twin:api-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-sensitive",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "workload:api-pod",
+            "service-account:cloud-twin:api-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+            "s3-bucket:cloud-twin-sensitive",
+            "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+          ],
+          "edges": [
+            {
+              "source": "workload:api-pod",
+              "relation": "uses_service_account",
+              "target": "service-account:cloud-twin:api-sa"
+            },
+            {
+              "source": "service-account:cloud-twin:api-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-sensitive",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+            },
+            {
+              "source": "s3-bucket:cloud-twin-sensitive",
+              "relation": "contains",
+              "target": "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "service-account:cloud-twin:api-sa": {
+      "reachableNodes": [
+        "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+        "s3-bucket:cloud-twin-sensitive",
+        "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+      ],
+      "paths": [
+        {
+          "nodes": [
+            "service-account:cloud-twin:api-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role"
+          ],
+          "edges": [
+            {
+              "source": "service-account:cloud-twin:api-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "service-account:cloud-twin:api-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+            "s3-bucket:cloud-twin-sensitive"
+          ],
+          "edges": [
+            {
+              "source": "service-account:cloud-twin:api-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-sensitive",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "service-account:cloud-twin:api-sa",
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+            "s3-bucket:cloud-twin-sensitive",
+            "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+          ],
+          "edges": [
+            {
+              "source": "service-account:cloud-twin:api-sa",
+              "relation": "maps_to_role",
+              "target": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role"
+            },
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-sensitive",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+            },
+            {
+              "source": "s3-bucket:cloud-twin-sensitive",
+              "relation": "contains",
+              "target": "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role": {
+      "reachableNodes": [
+        "s3-bucket:cloud-twin-sensitive",
+        "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+      ],
+      "paths": [
+        {
+          "nodes": [
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+            "s3-bucket:cloud-twin-sensitive"
+          ],
+          "edges": [
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-sensitive",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+            "s3-bucket:cloud-twin-sensitive",
+            "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+          ],
+          "edges": [
+            {
+              "source": "iam-role:arn:aws:iam::000000000000:role/cloud-twin-api-role",
+              "relation": "can_access",
+              "target": "s3-bucket:cloud-twin-sensitive",
+              "action": "s3:GetObject",
+              "effect": "Allow",
+              "resource": "arn:aws:s3:::cloud-twin-sensitive/*"
+            },
+            {
+              "source": "s3-bucket:cloud-twin-sensitive",
+              "relation": "contains",
+              "target": "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "principal:arn:aws:iam::000000000000:oidc-provider/kubernetes.default.svc": {
+      "reachableNodes": [],
+      "paths": []
+    },
+    "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:s3:ListBucket:arn:aws:s3:::cloud-twin-public": {
+      "reachableNodes": [],
+      "paths": []
+    },
+    "s3-bucket:cloud-twin-public": {
+      "reachableNodes": [
+        "s3-object:cloud-twin-public/public-object.txt"
+      ],
+      "paths": [
+        {
+          "nodes": [
+            "s3-bucket:cloud-twin-public",
+            "s3-object:cloud-twin-public/public-object.txt"
+          ],
+          "edges": [
+            {
+              "source": "s3-bucket:cloud-twin-public",
+              "relation": "contains",
+              "target": "s3-object:cloud-twin-public/public-object.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:s3:ListBucket:arn:aws:s3:::cloud-twin-public/*": {
+      "reachableNodes": [],
+      "paths": []
+    },
+    "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:s3:GetObject:arn:aws:s3:::cloud-twin-public": {
+      "reachableNodes": [],
+      "paths": []
+    },
+    "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:s3:GetObject:arn:aws:s3:::cloud-twin-public/*": {
+      "reachableNodes": [],
+      "paths": []
+    },
+    "permission:arn:aws:iam::000000000000:role/cloud-twin-web-role:cloud-twin-web-policy:sts:AssumeRole:arn:aws:iam::000000000000:role/cloud-twin-api-role": {
+      "reachableNodes": [],
+      "paths": []
+    },
+    "principal:arn:aws:iam::000000000000:role/cloud-twin-web-role": {
+      "reachableNodes": [],
+      "paths": []
+    },
+    "permission:arn:aws:iam::000000000000:role/cloud-twin-api-role:cloud-twin-api-policy:s3:ListBucket:arn:aws:s3:::cloud-twin-sensitive": {
+      "reachableNodes": [],
+      "paths": []
+    },
+    "s3-bucket:cloud-twin-sensitive": {
+      "reachableNodes": [
+        "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+      ],
+      "paths": [
+        {
+          "nodes": [
+            "s3-bucket:cloud-twin-sensitive",
+            "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+          ],
+          "edges": [
+            {
+              "source": "s3-bucket:cloud-twin-sensitive",
+              "relation": "contains",
+              "target": "s3-object:cloud-twin-sensitive/sensitive-object.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "permission:arn:aws:iam::000000000000:role/cloud-twin-api-role:cloud-twin-api-policy:s3:ListBucket:arn:aws:s3:::cloud-twin-sensitive/*": {
+      "reachableNodes": [],
+      "paths": []
+    },
+    "permission:arn:aws:iam::000000000000:role/cloud-twin-api-role:cloud-twin-api-policy:s3:GetObject:arn:aws:s3:::cloud-twin-sensitive": {
+      "reachableNodes": [],
+      "paths": []
+    },
+    "permission:arn:aws:iam::000000000000:role/cloud-twin-api-role:cloud-twin-api-policy:s3:GetObject:arn:aws:s3:::cloud-twin-sensitive/*": {
+      "reachableNodes": [],
+      "paths": []
+    },
+    "s3-object:cloud-twin-public/public-object.txt": {
+      "reachableNodes": [],
+      "paths": []
+    },
+    "s3-object:cloud-twin-sensitive/sensitive-object.txt": {
+      "reachableNodes": [],
+      "paths": []
+    }
+  }
+}

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud Security Digital Twin</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css', v='12') }}">
+  <script src="https://unpkg.com/cytoscape@3.30.4/dist/cytoscape.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Cloud Security Digital Twin</p>
+      <h1>Attack-path visualization</h1>
+      <p class="subtitle">Explore the graph generated from the LocalStack IAM and S3 state.</p>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="graph-card">
+      <div class="legend">
+        <span><i class="swatch workload"></i>Workload</span>
+        <span><i class="swatch service-account"></i>Service account</span>
+        <span><i class="swatch iam-role"></i>IAM role</span>
+        <span><i class="swatch s3-bucket"></i>S3 bucket</span>
+        <span><i class="swatch s3-object"></i>S3 object</span>
+      </div>
+      <div class="risk-legend" aria-label="Reachability risk legend">
+        <span><i class="risk-dot normal"></i>Normal user access</span>
+        <span><i class="risk-dot backend"></i>Backend resource</span>
+        <span><i class="risk-dot identity"></i>Identity / elevation boundary</span>
+        <span><i class="risk-dot takeover"></i>Takeover / backdoor path</span>
+      </div>
+      <div class="graph-help">
+        <strong>How to read the graph:</strong>
+        permissions are integrated into the links from roles to resources.
+        Hover over a role or link to see the allowed action and resource.
+        The <code>runs as</code> and <code>maps to IAM role</code> links show how a workload identity reaches an IAM role.
+      </div>
+      <div class="graph-viewport">
+        <div class="zoom-controls" aria-label="Graph zoom controls">
+          <button id="zoomInButton" class="icon-button" type="button" aria-label="Zoom in" title="Zoom in">+</button>
+          <button id="zoomOutButton" class="icon-button" type="button" aria-label="Zoom out" title="Zoom out">−</button>
+        </div>
+        <div id="graphTooltip" class="graph-tooltip" role="status" aria-live="polite"></div>
+        <div id="cy" aria-label="Interactive attack graph"></div>
+      </div>
+    </section>
+
+    <aside class="details-card">
+      <div class="actions">
+        <div class="action-buttons">
+          <button id="resetButton" type="button">Reset</button>
+          <button id="reloadButton" type="button">Reload</button>
+          <button id="regenerateButton" class="primary" type="button">Regenerate</button>
+        </div>
+        <div class="explore-controls">
+          <label class="source-picker">
+            <span>Explore from an identity</span>
+            <select id="sourceSelect" aria-label="Choose a workload, service account, or IAM role"></select>
+          </label>
+          <button id="highlightButton" type="button">Show reachable</button>
+        </div>
+      </div>
+      <h2>Selection details</h2>
+      <p id="status" class="status">Loading graph…</p>
+      <dl id="details">
+        <div><dt>Node</dt><dd>Select a node or edge.</dd></div>
+      </dl>
+      <h2>Predicted paths</h2>
+      <ol id="paths" class="paths"></ol>
+    </aside>
+  </main>
+  <script src="{{ url_for('static', filename='app.js', v='14') }}"></script>
+</body>
+</html>

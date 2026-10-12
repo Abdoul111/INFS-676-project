@@ -1,0 +1,1 @@
+This is a sensitive test object that should only be reachable through the API role.

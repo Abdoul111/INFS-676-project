@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-pod
+  namespace: cloud-twin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-pod
+  template:
+    metadata:
+      labels:
+        app: web-pod
+        tier: public
+    spec:
+      serviceAccountName: web-sa
+      containers:
+        - name: web
+          image: nginx:1.27-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env:
+            - name: AWS_REGION
+              value: us-east-1
+            - name: AWS_ENDPOINT_URL
+              value: http://host.docker.internal:4566
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-pod
+  namespace: cloud-twin
+spec:
+  selector:
+    app: web-pod
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-pod
+  namespace: cloud-twin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-pod
+  template:
+    metadata:
+      labels:
+        app: api-pod
+        tier: private
+    spec:
+      serviceAccountName: api-sa
+      containers:
+        - name: api
+          image: nginx:1.27-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env:
+            - name: AWS_REGION
+              value: us-east-1
+            - name: AWS_ENDPOINT_URL
+              value: http://host.docker.internal:4566
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-pod
+  namespace: cloud-twin
+spec:
+  selector:
+    app: api-pod
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP

@@ -1,0 +1,17 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::000000000000:oidc-provider/kubernetes.default.svc"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "kubernetes.default.svc:sub": "system:serviceaccount:cloud-twin:web-sa"
+        }
+      }
+    }
+  ]
+}
