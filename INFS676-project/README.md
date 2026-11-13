@@ -30,7 +30,7 @@ Build a cloud security digital twin that:
 1. Simulates a cloud-like environment.
 2. Captures IAM, bucket, workload, and network metadata.
 3. Converts that data into a graph representation.
-4. Evaluates permissions and trust relationships.
+4. Models permissions and trust relationships.
 5. Identifies attack paths from an initially compromised node.
 6. Compares predicted paths with actual attack execution results.
 
@@ -59,6 +59,8 @@ The pipeline runs in multiple phases:
 ### Phase 3: Graph modeling and normalization
 - **Completed:** Convert collected data into graph nodes and edges
 - **Completed:** Model workloads, service accounts, roles, permissions, buckets, objects, and trust links
+- **Completed:** Collect Kubernetes ServiceAccounts, workloads, Roles/ClusterRoles, RoleBindings/ClusterRoleBindings, and Secret metadata
+- **Completed:** Model Kubernetes RBAC inheritance and Secret read reachability alongside IAM/S3 paths
 - **Completed:** Build an initial graph from the collected state at `data/graph/attack-graph.json`
 - **Completed:** Encode allow/deny policy evaluation for action/resource matches
 - **Completed:** Apply explicit-deny precedence and wildcard action/resource matching
@@ -74,7 +76,70 @@ The pipeline runs in multiple phases:
 - **Pending:** Compare predicted paths against executed attacks
 - **Pending:** Record pass/fail outcomes and whether the path is valid
 
-The collector and initial graph pipeline are now working. The visualization can select any graph entity and highlight its reachable entities. The remaining core work is policy-semantic evaluation and empirical validation against controlled attack actions.
+### Kubernetes attack modeling
+
+The pipeline now collects Kubernetes metadata with
+[`collect-kubernetes-state.ps1`](./scripts/pipeline/collect-kubernetes-state.ps1). Secret values are
+never collected. The collector writes `data/raw/kubernetes-state.json`; the graph builder merges
+that snapshot with the LocalStack snapshot and represents RBAC bindings, permissions, and Secret
+read transitions.
+
+Run the combined pipeline after starting the environment:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\pipeline\run-data-pipeline.ps1
+```
+
+The generated graph includes `blastRadius` entries for every source. Each entry reports reachable
+node count, reachable sensitive-node count, sensitive targets, and path count. Sensitive targets
+currently include S3 objects and Kubernetes Secrets.
+
+The project also includes reproducible offline scenarios:
+
+```powershell
+python .\scripts\pipeline\generate-kubernetes-scenarios.py
+python .\scripts\pipeline\validate-kubernetes-scenarios.py .\data\raw\localstack-state.json
+```
+
+The validator compares vulnerable, restricted, and mixed RBAC configurations. It is intentionally
+separate from live attack execution so graph behavior can be tested without exposing real Secret
+values or requiring a cloud provider.
+
+The collector and graph pipeline are now working. The visualization can select any graph entity and highlight its reachable entities. The remaining core work is condition-aware policy evaluation and empirical validation against controlled attack actions. Trust relationships are collected and represented in the graph; role-assumption reachability is currently derived from matching permission and resource statements and is not yet validated against an observed credential exchange.
+
+### OSAKA integration
+
+OSAKA (ANSSI-FR's *Outil de Sécurité des Architectures Kubernetes Avancées*) is
+available as an optional Kubernetes-focused graph viewer. It runs in its own
+Docker Compose stack and does not change the LocalStack or project graph
+pipeline.
+
+See [`OSAKA-START.md`](./OSAKA-START.md) for the short installation, dashboard,
+collection, and shutdown instructions.
+
+Install and start it from PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\osaka\start-osaka.ps1
+```
+
+The script pins the upstream OSAKA checkout, configures a local Neo4j password,
+uses the published NeoDash `2.4.8` image for the visualizer, and starts the loader on
+`http://127.0.0.1:8080`, the editor on `http://127.0.0.1:8081`, and the
+read-only visualizer on `http://127.0.0.1:8082`. Set `OSAKA_HOST_IP` and
+`OSAKA_NEO4J_PASSWORD` to override the local defaults.
+
+After the `cloud-twin` Minikube profile is running, collect and upload
+Kubernetes metadata:
+
+```powershell
+$collection = powershell -ExecutionPolicy Bypass -File .\scripts\osaka\collect-osaka.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\osaka\upload-osaka-collection.ps1 -CollectionPath $collection[-1]
+```
+
+The collection removes Secret data before creating the ZIP. Stop OSAKA with
+`.\scripts\osaka\stop-osaka.ps1`. OSAKA is intended for an isolated local
+environment; do not expose its editor or loader publicly.
 
 ### Script organization
 
@@ -218,10 +283,10 @@ Expected outcome:
 The project pipeline runs end-to-end and can generate a real attack-path prediction from system state.
 
 Definition of done:
-- Data flow is complete from environment to graph to result
-- Pipeline is reproducible
-- Attack predictions can be validated
-- The system works as a prototype digital twin
+- [x] Data flow is complete from environment to graph to result
+- [x] Pipeline is reproducible
+- [ ] Attack predictions can be validated against observed actions
+- [x] The system works as a prototype digital twin
 
 ---
 
@@ -285,13 +350,14 @@ Use this checklist as the working execution plan:
 - [x] Define the initial graph schema
 - [x] Implement the initial normalizer
 - [x] Generate the initial attack graph
-- [ ] Implement complete IAM policy evaluation
+- [ ] Implement condition-aware IAM policy evaluation
 - [ ] Validate IAM permission evaluation against controlled actions
-- [ ] Load graph nodes and edges
-- [ ] Implement starting-node attack search
-- [ ] Generate the attack-path prediction
+- [x] Load graph nodes and edges
+- [x] Implement starting-node attack search
+- [x] Generate the attack-path prediction
 - [ ] Validate results against executed attack steps
-- [ ] Document setup and final findings
+- [x] Document setup and current implementation status
+- [ ] Document final findings and observed attack results
 
 ---
 

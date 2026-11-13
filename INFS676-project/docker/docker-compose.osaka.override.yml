@@ -1,0 +1,28 @@
+services:
+  database:
+    networks:
+      net:
+        ipv4_address: 172.29.0.20
+  editor:
+    networks:
+      net:
+        ipv4_address: 172.29.0.21
+  loader:
+    networks:
+      net:
+        ipv4_address: 172.29.0.22
+  visualizer:
+    image: neo4jlabs/neodash:2.4.8
+    build: null
+    environment:
+      standaloneHost: 127.0.0.1
+      standaloneProtocol: bolt
+    networks:
+      net:
+        ipv4_address: 172.29.0.23
+
+networks:
+  net:
+    ipam:
+      config:
+        - subnet: 172.29.0.0/24

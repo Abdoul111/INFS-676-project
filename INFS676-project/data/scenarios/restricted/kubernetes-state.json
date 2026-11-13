@@ -1,0 +1,76 @@
+{
+  "collectedAt": "scenario",
+  "context": "scenario",
+  "kubernetes": {
+    "serviceAccounts": [
+      {
+        "name": "web-sa",
+        "namespace": "cloud-twin",
+        "annotations": {}
+      },
+      {
+        "name": "api-sa",
+        "namespace": "cloud-twin",
+        "annotations": {}
+      }
+    ],
+    "workloads": [
+      {
+        "name": "web-pod",
+        "namespace": "cloud-twin",
+        "serviceAccount": "web-sa",
+        "tier": "public"
+      },
+      {
+        "name": "api-pod",
+        "namespace": "cloud-twin",
+        "serviceAccount": "api-sa",
+        "tier": "private"
+      }
+    ],
+    "roles": [
+      {
+        "kind": "Role",
+        "name": "restricted-role",
+        "namespace": "cloud-twin",
+        "rules": [
+          {
+            "apiGroups": [
+              ""
+            ],
+            "resources": [
+              "configmaps"
+            ],
+            "verbs": [
+              "get"
+            ]
+          }
+        ]
+      }
+    ],
+    "roleBindings": [
+      {
+        "name": "restricted-binding",
+        "namespace": "cloud-twin",
+        "roleRef": {
+          "kind": "Role",
+          "name": "restricted-role"
+        },
+        "subjects": [
+          {
+            "kind": "ServiceAccount",
+            "name": "web-sa",
+            "namespace": "cloud-twin"
+          }
+        ]
+      }
+    ],
+    "secrets": [
+      {
+        "name": "sensitive-config",
+        "namespace": "cloud-twin",
+        "type": "Opaque"
+      }
+    ]
+  }
+}
