@@ -17,6 +17,8 @@ services:
     environment:
       standaloneHost: 127.0.0.1
       standaloneProtocol: bolt
+      standaloneDashboardName: Cloud Twin Security Dashboard
+      standaloneDashboardDatabase: neo4j
     networks:
       net:
         ipv4_address: 172.29.0.23

@@ -110,9 +110,9 @@ The collector and graph pipeline are now working. The visualization can select a
 ### OSAKA integration
 
 OSAKA (ANSSI-FR's *Outil de Sécurité des Architectures Kubernetes Avancées*) is
-available as an optional Kubernetes-focused graph viewer. It runs in its own
-Docker Compose stack and does not change the LocalStack or project graph
-pipeline.
+the primary visualization layer for the unified project graph. It runs in its
+own Docker Compose stack while the existing Python/Cytoscape dashboard remains
+available as a legacy fallback.
 
 See [`OSAKA-START.md`](./OSAKA-START.md) for the short installation, dashboard,
 collection, and shutdown instructions.
@@ -140,6 +140,17 @@ powershell -ExecutionPolicy Bypass -File .\scripts\osaka\upload-osaka-collection
 The collection removes Secret data before creating the ZIP. Stop OSAKA with
 `.\scripts\osaka\stop-osaka.ps1`. OSAKA is intended for an isolated local
 environment; do not expose its editor or loader publicly.
+
+For the complete workflow, use
+`powershell -ExecutionPolicy Bypass -File .\scripts\osaka\sync-osaka.ps1`.
+By default, it reads the existing graph and catalog JSON files without
+recreating LocalStack or Kubernetes. Use `-RefreshEnvironment` only when the
+simulated environment or its collected state must be refreshed. A previously
+saved OSAKA ZIP can be uploaded with `-ExistingCollectionPath`.
+The project dashboard is defined in `integrations\osaka\project-dashboard.json`;
+vulnerability definitions are maintained in `data\catalog\vulnerability-catalog.json`.
+The NeoDash visualizer is configured to open `Cloud Twin Security Dashboard`
+instead of the stock OSAKA dashboard.
 
 ### Script organization
 
@@ -368,7 +379,6 @@ The project should remain focused and realistic. The team notes that the followi
 - Secrets Manager
 - More advanced policy handling
 - Expanded scenarios
-- Neo4j integration
 - Additional attack variants
 
 These items are useful only if time permits after the core pipeline is complete and validated.

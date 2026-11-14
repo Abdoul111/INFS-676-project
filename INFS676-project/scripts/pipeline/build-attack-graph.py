@@ -119,6 +119,8 @@ def build_kubernetes_graph(state, nodes, edges):
             continue
         add_edge(edges, binding_id, "binds_role", role_id)
         for subject in binding.get("subjects", []):
+            if not subject:
+                continue
             if subject.get("kind") != "ServiceAccount":
                 continue
             subject_namespace = subject.get("namespace", binding["namespace"])

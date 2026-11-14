@@ -1,0 +1,270 @@
+{
+  "title": "Cloud Twin Security Dashboard",
+  "version": "2.4",
+  "settings": {
+    "pagenumber": 0,
+    "editable": true,
+    "fullscreenEnabled": false,
+    "parameters": {},
+    "theme": "light"
+  },
+  "parameters": {},
+  "extensions": {
+    "active": true,
+    "activeReducers": [],
+    "styling": {
+      "active": true
+    }
+  },
+  "pages": [
+    {
+      "title": "Cloud Twin Overview",
+      "reports": [
+        {
+          "id": "cloud-twin-attack-paths",
+          "title": "Predicted workload paths to sensitive objects",
+          "query": "MATCH p=(source:CloudTwinNode)-[:CloudTwinEdge*1..8]->(target:CloudTwinNode) WHERE source.type = 'workload' AND target.type IN ['s3_object', 'secret'] RETURN p LIMIT 50",
+          "width": 16,
+          "height": 5,
+          "x": 0,
+          "y": 0,
+          "type": "graph",
+          "schema": [
+            [
+              "CloudTwinNode",
+              "id",
+              "type",
+              "name"
+            ]
+          ],
+          "selection": {
+            "CloudTwinNode": "name"
+          },
+          "settings": {
+            "refreshButtonEnabled": true,
+            "fullscreenEnabled": true,
+            "layout": "force-directed",
+            "styleRules": [
+              {
+                "field": "CloudTwinNode.type",
+                "condition": "=",
+                "value": "workload",
+                "customization": "node color",
+                "customizationValue": "#2563EB"
+              },
+              {
+                "field": "CloudTwinNode.type",
+                "condition": "=",
+                "value": "service_account",
+                "customization": "node color",
+                "customizationValue": "#16A34A"
+              },
+              {
+                "field": "CloudTwinNode.type",
+                "condition": "=",
+                "value": "iam_role",
+                "customization": "node color",
+                "customizationValue": "#D97706"
+              },
+              {
+                "field": "CloudTwinNode.type",
+                "condition": "=",
+                "value": "s3_bucket",
+                "customization": "node color",
+                "customizationValue": "#CA8A04"
+              },
+              {
+                "field": "CloudTwinNode.type",
+                "condition": "=",
+                "value": "s3_object",
+                "customization": "node color",
+                "customizationValue": "#DC2626"
+              },
+              {
+                "field": "CloudTwinNode.type",
+                "condition": "=",
+                "value": "permission",
+                "customization": "node color",
+                "customizationValue": "#7C3AED"
+              }
+            ]
+          }
+        },
+        {
+          "id": "cloud-twin-predicted-paths",
+          "title": "Predicted attack paths",
+          "query": "MATCH (p:CloudTwinPath), (source:CloudTwinNode {id: p.sourceId}), (target:CloudTwinNode {id: p.targetId}) RETURN p.pathId AS Path, source.name AS Source, source.type AS SourceType, target.name AS Target, target.type AS TargetType, p.edgeCount AS Hops ORDER BY p.edgeCount, p.pathId",
+          "width": 8,
+          "height": 5,
+          "x": 0,
+          "y": 5,
+          "type": "table",
+          "schema": [],
+          "selection": {},
+          "settings": {
+            "refreshButtonEnabled": true,
+            "fullscreenEnabled": true
+          }
+        },
+        {
+          "id": "cloud-twin-findings",
+          "title": "Findings and remediation",
+          "query": "MATCH (f:CloudTwinFinding) RETURN f.findingId AS Finding, f.severity AS Severity, f.title AS Title, f.remediation AS Remediation, f.blockingAction AS BlockingAction ORDER BY CASE f.severity WHEN 'critical' THEN 1 WHEN 'high' THEN 2 WHEN 'medium' THEN 3 ELSE 4 END",
+          "width": 8,
+          "height": 5,
+          "x": 16,
+          "y": 0,
+          "type": "table",
+          "schema": [],
+          "selection": {},
+          "settings": {
+            "refreshButtonEnabled": true,
+            "fullscreenEnabled": true
+          }
+        },
+        {
+          "id": "cloud-twin-stats",
+          "title": "Unified graph summary",
+          "query": "MATCH (n:CloudTwinNode) OPTIONAL MATCH (f:CloudTwinFinding) OPTIONAL MATCH (p:CloudTwinPath) RETURN count(DISTINCT n) AS Nodes, count(DISTINCT f) AS Findings, count(DISTINCT p) AS Paths",
+          "width": 8,
+          "height": 3,
+          "x": 0,
+          "y": 10,
+          "type": "table",
+          "schema": [],
+          "selection": {}
+        },
+        {
+          "id": "cloud-twin-escalation",
+          "title": "IAM escalation paths",
+          "query": "MATCH p=(workload:CloudTwinNode)-[:CloudTwinEdge*1..8]->(object:CloudTwinNode) WHERE workload.type = 'workload' AND object.type = 's3_object' RETURN p LIMIT 50",
+          "width": 16,
+          "height": 5,
+          "x": 8,
+          "y": 5,
+          "type": "graph",
+          "schema": [
+            [
+              "CloudTwinNode",
+              "id",
+              "type",
+              "name"
+            ]
+          ],
+          "selection": {
+            "CloudTwinNode": "name"
+          },
+          "settings": {
+            "refreshButtonEnabled": true,
+            "fullscreenEnabled": true,
+            "layout": "force-directed",
+            "styleRules": [
+              {
+                "field": "CloudTwinNode.type",
+                "condition": "=",
+                "value": "workload",
+                "customization": "node color",
+                "customizationValue": "#2563EB"
+              },
+              {
+                "field": "CloudTwinNode.type",
+                "condition": "=",
+                "value": "service_account",
+                "customization": "node color",
+                "customizationValue": "#16A34A"
+              },
+              {
+                "field": "CloudTwinNode.type",
+                "condition": "=",
+                "value": "iam_role",
+                "customization": "node color",
+                "customizationValue": "#D97706"
+              },
+              {
+                "field": "CloudTwinNode.type",
+                "condition": "=",
+                "value": "s3_bucket",
+                "customization": "node color",
+                "customizationValue": "#CA8A04"
+              },
+              {
+                "field": "CloudTwinNode.type",
+                "condition": "=",
+                "value": "s3_object",
+                "customization": "node color",
+                "customizationValue": "#DC2626"
+              },
+              {
+                "field": "CloudTwinNode.type",
+                "condition": "=",
+                "value": "permission",
+                "customization": "node color",
+                "customizationValue": "#7C3AED"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "title": "Kubernetes Analysis",
+      "reports": [
+        {
+          "id": "osaka-kubernetes-admin-paths",
+          "title": "Kubernetes paths to cluster admin",
+          "query": "MATCH p=(pod:Pods)-[*1..8]->(admin:ClusterAdmins) RETURN p LIMIT 50",
+          "width": 24,
+          "height": 6,
+          "x": 0,
+          "y": 0,
+          "type": "graph",
+          "schema": [
+            [
+              "Pods",
+              "nodeName",
+              "Privileged",
+              "Images",
+              "Labels",
+              "serviceAccount",
+              "Namespace",
+              "Name"
+            ],
+            [
+              "ClusterRoleBindings",
+              "uid",
+              "RoleRef_name",
+              "subject_kind",
+              "rbac",
+              "subject_name",
+              "RoleRef_kind",
+              "subject_namespace",
+              "Name",
+              "risky_roles",
+              "risky"
+            ],
+            [
+              "Nodes",
+              "Type",
+              "Name"
+            ],
+            [
+              "ClusterAdmins",
+              "Name"
+            ]
+          ],
+          "selection": {
+            "Pods": "Name",
+            "ClusterRoleBindings": "Name",
+            "Nodes": "Name",
+            "ClusterAdmins": "Name"
+          },
+          "settings": {
+            "refreshButtonEnabled": true,
+            "fullscreenEnabled": true,
+            "layout": "force-directed"
+          }
+        }
+      ]
+    }
+  ]
+}

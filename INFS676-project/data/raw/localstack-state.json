@@ -1,5 +1,5 @@
 ﻿{
-    "collectedAt":  "2026-10-12T21:00:46.1556258Z",
+    "collectedAt":  "2026-11-14T04:02:37.7144079Z",
     "region":  "us-east-1",
     "endpoint":  "http://localhost:4566",
     "identityMappings":  [
@@ -17,6 +17,44 @@
                              }
                          ],
     "roles":  [
+                  {
+                      "roleName":  "cloud-twin-api-role",
+                      "roleArn":  "arn:aws:iam::000000000000:role/cloud-twin-api-role",
+                      "trustPolicy":  {
+                                          "Version":  "2012-10-17",
+                                          "Statement":  [
+                                                            {
+                                                                "Effect":  "Allow",
+                                                                "Principal":  {
+                                                                                  "AWS":  "arn:aws:iam::000000000000:role/cloud-twin-web-role"
+                                                                              },
+                                                                "Action":  "sts:AssumeRole"
+                                                            }
+                                                        ]
+                                      },
+                      "inlinePolicies":  [
+                                             {
+                                                 "name":  "cloud-twin-api-policy",
+                                                 "document":  {
+                                                                  "Version":  "2012-10-17",
+                                                                  "Statement":  [
+                                                                                    {
+                                                                                        "Sid":  "ReadSensitiveObjects",
+                                                                                        "Effect":  "Allow",
+                                                                                        "Action":  [
+                                                                                                       "s3:ListBucket",
+                                                                                                       "s3:GetObject"
+                                                                                                   ],
+                                                                                        "Resource":  [
+                                                                                                         "arn:aws:s3:::cloud-twin-sensitive",
+                                                                                                         "arn:aws:s3:::cloud-twin-sensitive/*"
+                                                                                                     ]
+                                                                                    }
+                                                                                ]
+                                                              }
+                                             }
+                                         ]
+                  },
                   {
                       "roleName":  "cloud-twin-web-role",
                       "roleArn":  "arn:aws:iam::000000000000:role/cloud-twin-web-role",
@@ -65,50 +103,12 @@
                                                               }
                                              }
                                          ]
-                  },
-                  {
-                      "roleName":  "cloud-twin-api-role",
-                      "roleArn":  "arn:aws:iam::000000000000:role/cloud-twin-api-role",
-                      "trustPolicy":  {
-                                          "Version":  "2012-10-17",
-                                          "Statement":  [
-                                                            {
-                                                                "Effect":  "Allow",
-                                                                "Principal":  {
-                                                                                  "AWS":  "arn:aws:iam::000000000000:role/cloud-twin-web-role"
-                                                                              },
-                                                                "Action":  "sts:AssumeRole"
-                                                            }
-                                                        ]
-                                      },
-                      "inlinePolicies":  [
-                                             {
-                                                 "name":  "cloud-twin-api-policy",
-                                                 "document":  {
-                                                                  "Version":  "2012-10-17",
-                                                                  "Statement":  [
-                                                                                    {
-                                                                                        "Sid":  "ReadSensitiveObjects",
-                                                                                        "Effect":  "Allow",
-                                                                                        "Action":  [
-                                                                                                       "s3:ListBucket",
-                                                                                                       "s3:GetObject"
-                                                                                                   ],
-                                                                                        "Resource":  [
-                                                                                                         "arn:aws:s3:::cloud-twin-sensitive",
-                                                                                                         "arn:aws:s3:::cloud-twin-sensitive/*"
-                                                                                                     ]
-                                                                                    }
-                                                                                ]
-                                                              }
-                                             }
-                                         ]
                   }
               ],
     "buckets":  [
                     {
                         "name":  "cloud-twin-public",
-                        "creationDate":  "2026-10-12T17:19:19.000Z",
+                        "creationDate":  "2026-11-14T04:02:30.000Z",
                         "objects":  [
                                         {
                                             "key":  "public-object.txt",
@@ -119,7 +119,7 @@
                     },
                     {
                         "name":  "cloud-twin-sensitive",
-                        "creationDate":  "2026-10-12T17:19:21.000Z",
+                        "creationDate":  "2026-11-14T04:02:32.000Z",
                         "objects":  [
                                         {
                                             "key":  "sensitive-object.txt",

@@ -245,8 +245,9 @@ and checked with
 
 The vulnerable and mixed scenarios predict Secret reachability from `web-pod`; the restricted
 scenario does not. This validates the new Kubernetes graph transitions, but it is not a substitute
-for live adversary emulation. OSAKA and Caldera remain optional follow-up integrations rather than
-new dependencies in the core pipeline.
+for live adversary emulation. OSAKA is now the primary visualization integration: its Neo4j
+database receives the Kubernetes collection first, then the Cloud Twin IAM/S3 graph, catalog
+findings, and predicted paths. Caldera remains an optional follow-up for live adversary emulation.
 
 ### Avner status
 
