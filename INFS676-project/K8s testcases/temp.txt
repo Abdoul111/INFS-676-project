@@ -1,0 +1,4 @@
+here we need to create 10 different scenarios inspried from the current structure in k8s folder. and slightly modified to fit different attack types such DDOS, low replicas, 
+
+
+the teacher said: "your project does IAM simulation nicely, but there are attacks that happen after attackers already got into the environment through IAM roles. These are usually lateral movement through Kubernetes.

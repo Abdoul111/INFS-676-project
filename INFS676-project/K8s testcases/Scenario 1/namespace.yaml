@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cloud-twin
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: web-sa
+  namespace: cloud-twin
+  annotations:
+    cloud-twin.localstack/role-arn: arn:aws:iam::000000000000:role/cloud-twin-web-role
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: api-sa
+  namespace: cloud-twin
+  annotations:
+    cloud-twin.localstack/role-arn: arn:aws:iam::000000000000:role/cloud-twin-api-role
